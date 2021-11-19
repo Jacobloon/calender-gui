@@ -35,3 +35,18 @@ count = 1
 while count <= days:
     events[count] = ""
     count += 1
+   
+# User selects date
+userChoice = int(input("Enter a date: "))
+found = False
+while not found:
+    for date in dates:
+        if not found:
+            if userChoice == date:
+                selectDate = date
+                found = True
+    if not found:
+        userChoice = int(input("Enter a Valid Date: "))
+
+# User selects action for date
+
