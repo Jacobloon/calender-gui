@@ -25,7 +25,6 @@ while not found:
         if month == months:
             found = True
             days = monthDates[months]
-            print(days)
     if not found:
         month = input("Enter a Valid Month: ").lower()
 
@@ -35,12 +34,12 @@ count = 1
 while count <= days:
     events[count] = ""
     count += 1
-   
+
 # User selects date
 userChoice = int(input("Enter a date: "))
 found = False
 while not found:
-    for date in dates:
+    for date in events:
         if not found:
             if userChoice == date:
                 selectDate = date
@@ -48,5 +47,35 @@ while not found:
     if not found:
         userChoice = int(input("Enter a Valid Date: "))
 
-# User selects action for date
+# Creates blank time details dictionary for the given day
+#           CHANGE INTO WRITING INTO A .CSV FILE
+hours = {}
+for hour in range(24):
+    hours[hour+1] = ""
 
+
+# Viewing events
+#           CHANGE INTO READING THE .CSV FILE
+def view_plans():
+    plans = False
+    for plan in hours:
+        if hours[plan] != "":
+            plans = True
+            print("{:d}:00 ~ {:s}".format(events, hours[plan]))
+    if not plans:
+        print("No plans scheduled yet\n")
+
+
+# User selects action for date
+actionChoice = int(input("What would you like to do?: \n"
+                         "1) ~VIEW EVENTS~\n"
+                         "2) ~ADD EVENTS~\n"
+                         "3) ~DELETE EVENTS\n"))
+
+while actionChoice < 1 or actionChoice > 2:
+    actionChoice = int(input("Please enter a valid choice: \n"
+                             "1) ~VIEW EVENTS~\n"
+                             "2) ~ADD EVENTS~\n"
+                             "3) ~DELETE EVENTS~\n"))
+if actionChoice == 1:
+    view_plans()
