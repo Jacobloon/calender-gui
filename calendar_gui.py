@@ -1,3 +1,5 @@
+from tkinter import *
+
 # Starting Variables
 year = float(input("Enter the Year : "))
 month = input("Enter the Month : ").lower()
@@ -29,33 +31,22 @@ while not found:
         month = input("Enter a Valid Month: ").lower()
 
 # Creates blank events dictionary for the given month
+#           TODO: CHANGE INTO WRITING INTO A .CSV FILE
 events = {}
 count = 1
 while count <= days:
     events[count] = ""
     count += 1
 
-# User selects date
-userChoice = int(input("Enter a date: "))
-found = False
-while not found:
-    for date in events:
-        if not found:
-            if userChoice == date:
-                selectDate = date
-                found = True
-    if not found:
-        userChoice = int(input("Enter a Valid Date: "))
-
 # Creates blank time details dictionary for the given day
-#           CHANGE INTO WRITING INTO A .CSV FILE
+#           TODO: CHANGE INTO WRITING INTO A .CSV FILE
 hours = {}
 for hour in range(24):
     hours[hour+1] = ""
 
 
 # Viewing events
-#           CHANGE INTO READING THE .CSV FILE
+#           TODO: CHANGE INTO READING THE .CSV FILE
 def view_plans():
     plans = False
     for plan in hours:
@@ -67,15 +58,40 @@ def view_plans():
 
 
 # User selects action for date
-actionChoice = int(input("What would you like to do?: \n"
-                         "1) ~VIEW EVENTS~\n"
-                         "2) ~ADD EVENTS~\n"
-                         "3) ~DELETE EVENTS\n"))
+def date_action():
+    action_choice = int(input("What would you like to do?: \n"
+                              "1) ~VIEW EVENTS~\n"
+                              "2) ~ADD EVENTS~\n"
+                              "3) ~DELETE EVENTS\n"))
 
-while actionChoice < 1 or actionChoice > 2:
-    actionChoice = int(input("Please enter a valid choice: \n"
-                             "1) ~VIEW EVENTS~\n"
-                             "2) ~ADD EVENTS~\n"
-                             "3) ~DELETE EVENTS~\n"))
-if actionChoice == 1:
-    view_plans()
+    while action_choice < 1 or action_choice > 3:
+        action_choice = int(input("Please enter a valid choice: \n"
+                                  "1) ~VIEW EVENTS~\n"
+                                  "2) ~ADD EVENTS~\n"
+                                  "3) ~DELETE EVENTS~\n"))
+    if action_choice == 1:
+        view_plans()
+
+
+# Tkinter initial window creation
+weekDays = {"Sunday": 0, "Monday": 1, "Tuesday": 2, "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6}
+root = Tk()
+myLabel = Label(root, text=month.upper()).grid(row=0, column=3)
+for dayNames in weekDays:
+    dayLabel = Label(root, text="{:s}".format(dayNames))
+    dayLabel.grid(row=1, column=weekDays[dayNames])
+
+# Creates dates as buttons on window
+#            TODO: Function to calculate start of month based on year (EX. December 1st on wednesday 2021)
+startColumn = 0
+rowCt = 2
+columnCt = startColumn
+for calDays in range(days):
+    dayButton = Button(root, text=calDays+1, command=date_action)
+    if columnCt < 8:
+        dayButton.grid(row=rowCt, column=columnCt)
+        columnCt += 1
+    else:
+        columnCt = 0
+        rowCt += 1
+root.mainloop()
