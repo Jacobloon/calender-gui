@@ -1,5 +1,6 @@
 from tkinter import *
 import tkinter as tk
+import tkinter.font, random, re
 
 days = 0
 
@@ -85,6 +86,35 @@ for hour in range(24):
 
 
 # Viewing events
+
+class Application(Frame):
+    
+    def __init__(self, master):
+        Frame.__init__(self, master, ...)
+        self.grid()
+        self.create_widgets()
+        self.start()
+
+        
+    def parse(self):
+        ...
+
+
+    def create_widgets(self):
+        
+        ...
+
+        self.submit = Button(self, text= "Submit Command.", command= self.parse, ...)
+        self.submit.grid(...)
+
+        
+root = Tk()
+root.bind('<Return>', self.parse)
+
+app = Application(root)
+
+root.mainloop()
+
 #           TODO: CHANGE INTO READING THE .CSV FILE
 def view_plans():
     plans = False
