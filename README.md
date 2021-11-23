@@ -34,7 +34,7 @@ Feature list:(At least 12 for A)
 **if statements **
 nested if statements 
 random numbers 
-while loops 
+**while loops** 
 **for loops **
 **nested loops** 
 file input  
