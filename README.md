@@ -33,32 +33,32 @@ If yes, specify notifications
 If not, return to date entry
  
 Feature list:(At least 12 for A) 
-if statements 
+**if statements **
 nested if statements 
 random numbers 
 while loops 
-for loops 
-nested loops 
+**for loops **
+**nested loops** 
 file input  
 data cleaning 
 
 parallel lists 
 file output 
-lists manipulation 
+**lists manipulation **
 pixel manipulation 
 string manipulation 
 image manipulation 
 plotting using module matplotlib 
 exhaustive data searching  
 match and stop data searching 
-meaningful comments throughout your program 
+**meaningful comments throughout your program **
 
 Features not covered in class: 
-Other collections like tuples, dictionaries, etc. 
+**Other collections like tuples, dictionaries, etc. **
 Integrating Python and Excel spreadsheets including formulas and VBA macros 
 Nested lists 
-Creating and using your own functions 
+**Creating and using your own functions **
 Use of sounds 
-Other python modules 
+**Other python modules **
 
  
