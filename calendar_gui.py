@@ -110,6 +110,9 @@ def date_action():
                                   "3) ~DELETE EVENTS~\n"))
     if action_choice == 1:
         view_plans()
+   
+    if action_choice == 2:
+        open()
 
 
 # Tkinter initial window creation
@@ -134,3 +137,19 @@ for calDays in range(days):
         columnCt = 0
         rowCt += 1
 root.mainloop()
+
+
+# Python code to demonstrate the working of
+# calendar() and firstweeksday()
+ 
+# importing calendar module for calendar operations
+import calendar
+ 
+# using calendar to print calendar of year
+# prints calendar of 2012
+print ("The calendar of year 2012 is : ")
+print (calendar.calendar(2012,2,1,6))
+ 
+#using firstweekday() to print starting day number
+print ("The starting day number in calendar is : ",end="")
+print (calendar.firstweekday())
