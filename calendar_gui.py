@@ -1,5 +1,6 @@
 from tkinter import *
 import tkinter as tk
+import tkinter.font, random, re
 
 days = 0
 
