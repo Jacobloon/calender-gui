@@ -1,12 +1,12 @@
 from tkinter import *
 import tkinter as tk
-import tkinter.font, random, re
+
 
 days = 0
 
 
 # Grabs User Year
-def year_submit():
+def year_submit(event=None):
     global year
     year = int(yearVar.get())
     yearVar.set("")
@@ -15,7 +15,7 @@ def year_submit():
 
 
 # Grabs User Year
-def month_submit():
+def month_submit(event=None):
     global month
     month = str(monthVar.get()).lower()
     monthVar.set("")
@@ -29,6 +29,7 @@ yearVar = tk.StringVar()
 startTitle = Label(start, text="Enter the Year:").grid(row=0)
 yearTitle = Entry(start, textvariable=yearVar).grid(row=1)
 buttonTitle = Button(start, text="Submit", padx=10, command=year_submit).grid(row=2)
+start.bind('<Return>', year_submit)
 start.mainloop()
 
 # Tkinter Month Menu
@@ -37,6 +38,7 @@ monthVar = tk.StringVar()
 startTitle = Label(start, text="Enter the Month:").grid(row=0)
 yearTitle = Entry(start, textvariable=monthVar).grid(row=1)
 buttonTitle = Button(start, text="Submit", padx=10, command=month_submit).grid(row=2)
+start.bind('<Return>', month_submit)
 start.mainloop()
 
 
