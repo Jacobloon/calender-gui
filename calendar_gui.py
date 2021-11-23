@@ -1,9 +1,43 @@
 from tkinter import *
+import tkinter as tk
 
-# Starting Variables
-year = float(input("Enter the Year : "))
-month = input("Enter the Month : ").lower()
 days = 0
+
+
+# Grabs User Year
+def year_submit():
+    global year
+    year = int(yearVar.get())
+    yearVar.set("")
+    print(year)
+    start.destroy()
+
+
+# Grabs User Year
+def month_submit():
+    global month
+    month = str(monthVar.get()).lower()
+    monthVar.set("")
+    print(month)
+    start.destroy()
+
+
+# Tkinter Year Menu
+start = tk.Tk()
+yearVar = tk.StringVar()
+startTitle = Label(start, text="Enter the Year:").grid(row=0)
+yearTitle = Entry(start, textvariable=yearVar).grid(row=1)
+buttonTitle = Button(start, text="Submit", padx=10, command=year_submit).grid(row=2)
+start.mainloop()
+
+# Tkinter Month Menu
+start = tk.Tk()
+monthVar = tk.StringVar()
+startTitle = Label(start, text="Enter the Month:").grid(row=0)
+yearTitle = Entry(start, textvariable=monthVar).grid(row=1)
+buttonTitle = Button(start, text="Submit", padx=10, command=month_submit).grid(row=2)
+start.mainloop()
+
 
 # Calculate February on Leap Years
 if year % 4 == 0:
@@ -28,7 +62,12 @@ while not found:
             found = True
             days = monthDates[months]
     if not found:
-        month = input("Enter a Valid Month: ").lower()
+        start = tk.Tk()
+        monthVar = tk.StringVar()
+        startTitle = Label(start, text="Enter a valid month:").grid(row=0)
+        yearTitle = Entry(start, textvariable=monthVar).grid(row=1)
+        buttonTitle = Button(start, text="Submit", padx=10, command=month_submit).grid(row=2)
+        start.mainloop()
 
 # Creates blank events dictionary for the given month
 #           TODO: CHANGE INTO WRITING INTO A .CSV FILE
