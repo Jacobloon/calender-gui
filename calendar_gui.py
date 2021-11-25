@@ -1,7 +1,6 @@
 from tkinter import *
 import tkinter as tk
 
-
 days = 0
 
 
@@ -70,15 +69,26 @@ while not found:
         startTitle = Label(start, text="Enter a valid month:").grid(row=0)
         yearTitle = Entry(start, textvariable=monthVar).grid(row=1)
         buttonTitle = Button(start, text="Submit", padx=10, command=month_submit).grid(row=2)
+        start.bind('<Return>', month_submit)
         start.mainloop()
 
-# Creates blank events dictionary for the given month
-#           TODO: CHANGE INTO WRITING INTO A .CSV FILE
+# Reads current csv
+file = open("month_folder/{:s}.csv".format(month), 'r', )
 events = {}
-count = 1
-while count <= days:
-    events[count] = ""
-    count += 1
+monthCount = file.read()
+monthCount = monthCount.split(",")
+
+evtCount = 1
+evtDate = 1
+for days in monthCount:
+    days = days.strip(",\n")
+    if evtCount <= monthDates["{:s}".format(month)]:
+        events[days] = ""
+    if evtCount > monthDates["{:s}".format(month)]:
+        events[str(evtDate)] = days
+        evtDate += 1
+    evtCount += 1
+days = len(events)
 
 # Creates blank time details dictionary for the given day
 #           TODO: CHANGE INTO WRITING INTO A .CSV FILE
@@ -142,9 +152,9 @@ for calDays in range(days):
 root.mainloop()
 
 
-# Python code to demonstrate the working of
-# calendar() and firstweeksday()
- 
+'''# Python code to demonstrate the working of
+# calendar() and first_weeks_day()
+
 # importing calendar module for calendar operations
 import calendar
  
@@ -156,3 +166,4 @@ print (calendar.calendar(2012,2,1,6))
 #using firstweekday() to print starting day number
 print ("The starting day number in calendar is : ",end="")
 print (calendar.firstweekday())
+'''
