@@ -101,15 +101,16 @@ for hour in range(24):
 #           TODO: CHANGE INTO READING THE .CSV FILE
 def view_plans():
     plans = False
-    for plan in hours:
-        if hours[plan] != "":
+    for plan in events:
+        if events[plan] != "empty":
             plans = True
-            print("{:d}:00 ~ {:s}".format(events, hours[plan]))
+            print(events[plan])
     if not plans:
         print("No plans scheduled yet\n")
 
 
 # User selects action for date
+#          TODO: Open in new Tkinter window
 def date_action():
     action_choice = int(input("What would you like to do?: \n"
                               "1) ~VIEW EVENTS~\n"
@@ -138,6 +139,7 @@ for dayNames in weekDays:
 
 # Creates dates as buttons on window
 #            TODO: Function to calculate start of month based on year (EX. December 1st on wednesday 2021)
+#            TODO: Button returns date value
 startColumn = 0
 rowCt = 2
 columnCt = startColumn
