@@ -1,5 +1,6 @@
 from tkinter import *
 import tkinter as tk
+from tkinter.ttk import *
 
 days = 0
 
@@ -10,7 +11,7 @@ def year_submit(event=None):
     year = int(yearVar.get())
     yearVar.set("")
     print(year)
-    start.destroy()
+    yearTk.destroy()
 
 
 # Grabs User Year
@@ -19,26 +20,30 @@ def month_submit(event=None):
     month = str(monthVar.get()).lower()
     monthVar.set("")
     print(month)
-    start.destroy()
+    monthTk.destroy()
 
 
 # Tkinter Year Menu
-start = tk.Tk()
+yearTk = tk.Tk()
 yearVar = tk.StringVar()
-startTitle = Label(start, text="Enter the Year:").grid(row=0)
-yearTitle = Entry(start, textvariable=yearVar).grid(row=1)
-buttonTitle = Button(start, text="Submit", padx=10, command=year_submit).grid(row=2)
-start.bind('<Return>', year_submit)
-start.mainloop()
+startTitle = Label(yearTk, text="Enter the Year:").grid(row=0)
+yearEntry = Entry(yearTk, textvariable=yearVar)
+yearEntry.focus()
+yearEntry.grid(row=1)
+buttonYear = Button(yearTk, text="Submit", command=year_submit).grid(row=2)
+yearTk.bind('<Return>', year_submit)
+yearTk.mainloop()
 
 # Tkinter Month Menu
-start = tk.Tk()
+monthTk = tk.Tk()
 monthVar = tk.StringVar()
-startTitle = Label(start, text="Enter the Month:").grid(row=0)
-yearTitle = Entry(start, textvariable=monthVar).grid(row=1)
-buttonTitle = Button(start, text="Submit", padx=10, command=month_submit).grid(row=2)
-start.bind('<Return>', month_submit)
-start.mainloop()
+monthTitle = Label(monthTk, text="Enter the Month:").grid(row=0)
+monthEntry = Entry(monthTk, textvariable=monthVar)
+monthEntry.focus()
+monthEntry.grid(row=1)
+buttonMonth = Button(monthTk, text="Submit", command=month_submit).grid(row=2)
+monthTk.bind('<Return>', month_submit)
+monthTk.mainloop()
 
 
 # Calculate February on Leap Years
@@ -67,8 +72,8 @@ while not found:
         start = tk.Tk()
         monthVar = tk.StringVar()
         startTitle = Label(start, text="Enter a valid month:").grid(row=0)
-        yearTitle = Entry(start, textvariable=monthVar).grid(row=1)
-        buttonTitle = Button(start, text="Submit", padx=10, command=month_submit).grid(row=2)
+        monthTitle = Entry(start, textvariable=monthVar).grid(row=1)
+        buttonTitle = Button(start, text="Submit", command=month_submit).grid(row=2)
         start.bind('<Return>', month_submit)
         start.mainloop()
 
@@ -112,21 +117,19 @@ def view_plans():
 # User selects action for date
 #          TODO: Open in new Tkinter window
 def date_action():
-    action_choice = int(input("What would you like to do?: \n"
-                              "1) ~VIEW EVENTS~\n"
-                              "2) ~ADD EVENTS~\n"
-                              "3) ~DELETE EVENTS\n"))
-
-    while action_choice < 1 or action_choice > 3:
-        action_choice = int(input("Please enter a valid choice: \n"
-                                  "1) ~VIEW EVENTS~\n"
-                                  "2) ~ADD EVENTS~\n"
-                                  "3) ~DELETE EVENTS~\n"))
+    actions = Tk()
+    actTitle = Label(actions, text="What would you like to do?").grid(row=0, column=1)
+    viewButton = Button(actions, text="View Events", command=view_plans).grid(row=1, column=0)
+    addButton = Button(actions, text="Add Events").grid(row=1, column=1)
+    delButton = Button(actions, text="Delete Events").grid(row=1, column=2)
+    '''
     if action_choice == 1:
         view_plans()
    
     if action_choice == 2:
         open()
+    '''
+    actions.mainloop()
 
 
 # Tkinter initial window creation
@@ -145,12 +148,14 @@ rowCt = 2
 columnCt = startColumn
 for calDays in range(days):
     dayButton = Button(root, text=calDays+1, command=date_action)
-    if columnCt < 8:
+    if columnCt < 7:
         dayButton.grid(row=rowCt, column=columnCt)
         columnCt += 1
     else:
         columnCt = 0
         rowCt += 1
+        dayButton.grid(row=rowCt, column=columnCt)
+        columnCt += 1
 root.mainloop()
 
 
