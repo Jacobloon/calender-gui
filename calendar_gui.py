@@ -1,8 +1,24 @@
 from tkinter import *
 import tkinter as tk
 from tkinter.ttk import *
+import math
 
 days = 0
+febNum = 28
+
+
+# Calculate February on Leap Years
+def leap_year():
+    global febNum
+    if year % 4 == 0:
+        if (year % 100 == 0) and (year % 400 == 0):
+            febNum = 29
+        elif year % 100 == 0:
+            febNum = 28
+        else:
+            febNum = 29
+    else:
+        febNum = 28
 
 
 # Grabs User Year
@@ -11,6 +27,7 @@ def year_submit(event=None):
     year = int(yearVar.get())
     yearVar.set("")
     print(year)
+    leap_year()
     yearTk.destroy()
 
 
@@ -45,21 +62,11 @@ buttonMonth = Button(monthTk, text="Submit", command=month_submit).grid(row=2)
 monthTk.bind('<Return>', month_submit)
 monthTk.mainloop()
 
-
-# Calculate February on Leap Years
-if year % 4 == 0:
-    if (year % 100 == 0) and (year % 400 == 0):
-        febNum = 29
-    elif year % 100 == 0:
-        febNum = 28
-    else:
-        febNum = 29
-else:
-    febNum = 28
-
 # Define {Month: Dates} in a Dictionary
 monthDates = {"january": 31, "february": febNum, "march": 31, "april": 30, "may": 31, "june": 30, "july": 31,
               "august": 31, "september": 30, "october": 31, "november": 30, "december": 31}
+monthNums = {"january": 11, "february": 12, "march": 1, "april": 2, "may": 3, "june": 4, "july":5, "august": 6, "september": 7,
+             "october": 8, "november": 9, "december": 10}
 
 # Define number of days in chosen month
 found = False
@@ -69,20 +76,19 @@ while not found:
             found = True
             days = monthDates[months]
     if not found:
-        start = tk.Tk()
+        monthTk = tk.Tk()
         monthVar = tk.StringVar()
-        startTitle = Label(start, text="Enter a valid month:").grid(row=0)
-        monthTitle = Entry(start, textvariable=monthVar).grid(row=1)
-        buttonTitle = Button(start, text="Submit", command=month_submit).grid(row=2)
-        start.bind('<Return>', month_submit)
-        start.mainloop()
+        startTitle = Label(monthTk, text="Enter a valid month:").grid(row=0)
+        monthTitle = Entry(monthTk, textvariable=monthVar).grid(row=1)
+        buttonTitle = Button(monthTk, text="Submit", command=month_submit).grid(row=2)
+        monthTk.bind('<Return>', month_submit)
+        monthTk.mainloop()
 
 # Reads current csv
 file = open("month_folder/{:s}.csv".format(month), 'r', )
 events = {}
 monthCount = file.read()
 monthCount = monthCount.split(",")
-
 evtCount = 1
 evtDate = 1
 for days in monthCount:
@@ -95,15 +101,9 @@ for days in monthCount:
     evtCount += 1
 days = len(events)
 
-# Creates blank time details dictionary for the given day
-#           TODO: CHANGE INTO WRITING INTO A .CSV FILE
-hours = {}
-for hour in range(24):
-    hours[hour+1] = ""
-
 
 # Viewing events
-#           TODO: CHANGE INTO READING THE .CSV FILE
+#           TODO: fix output format Ex. On the 3rd, this is happening
 def view_plans():
     plans = False
     for plan in events:
@@ -118,10 +118,10 @@ def view_plans():
 #          TODO: Open in new Tkinter window
 def date_action():
     actions = Tk()
-    actTitle = Label(actions, text="What would you like to do?").grid(row=0, column=1)
-    viewButton = Button(actions, text="View Events", command=view_plans).grid(row=1, column=0)
-    addButton = Button(actions, text="Add Events").grid(row=1, column=1)
-    delButton = Button(actions, text="Delete Events").grid(row=1, column=2)
+    act_title = Label(actions, text="What would you like to do?").grid(row=0, column=1)
+    view_button = Button(actions, text="View Events", command=view_plans).grid(row=1, column=0)
+    add_button = Button(actions, text="Add Events").grid(row=1, column=1)
+    del_button = Button(actions, text="Delete Events").grid(row=1, column=2)
     '''
     if action_choice == 1:
         view_plans()
