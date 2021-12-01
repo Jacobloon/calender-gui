@@ -40,6 +40,15 @@ def month_submit(event=None):
     monthTk.destroy()
 
 
+# Grabs User Date
+#               TODO: dateVar.get() return an integer not ""
+def date_submit(event=None):
+    global date
+    date = int(dateVar.get())
+    print(date)
+    date_choices()
+
+
 # Tkinter Year Menu
 yearTk = tk.Tk()
 yearVar = tk.StringVar()
@@ -65,8 +74,8 @@ monthTk.mainloop()
 # Define {Month: Dates} in a Dictionary
 monthDates = {"january": 31, "february": febNum, "march": 31, "april": 30, "may": 31, "june": 30, "july": 31,
               "august": 31, "september": 30, "october": 31, "november": 30, "december": 31}
-monthNums = {"january": 11, "february": 12, "march": 1, "april": 2, "may": 3, "june": 4, "july":5, "august": 6, "september": 7,
-             "october": 8, "november": 9, "december": 10}
+monthNums = {"january": 11, "february": 12, "march": 1, "april": 2, "may": 3, "june": 4, "july": 5, "august": 6,
+             "september": 7, "october": 8, "november": 9, "december": 10}
 
 # Define number of days in chosen month
 found = False
@@ -105,31 +114,36 @@ days = len(events)
 # Viewing events
 #           TODO: fix output format Ex. On the 3rd, this is happening
 def view_plans():
-    plans = False
-    for plan in events:
-        if events[plan] != "empty":
-            plans = True
-            print(events[plan])
-    if not plans:
+    if events[date] != "empty":
+        print(events[date])
+    else:
         print("No plans scheduled yet\n")
 
 
 # User selects action for date
-#          TODO: Open in new Tkinter window
-def date_action():
+def date_choices():
     actions = Tk()
     act_title = Label(actions, text="What would you like to do?").grid(row=0, column=1)
     view_button = Button(actions, text="View Events", command=view_plans).grid(row=1, column=0)
     add_button = Button(actions, text="Add Events").grid(row=1, column=1)
     del_button = Button(actions, text="Delete Events").grid(row=1, column=2)
-    '''
-    if action_choice == 1:
-        view_plans()
-   
-    if action_choice == 2:
-        open()
-    '''
     actions.mainloop()
+
+
+# Grabs user's date
+#           TODO: Make output a value for the entry
+def date_entry():
+    global dateTk
+    global dateVar
+    dateTk = tk.Tk()
+    dateVar = tk.StringVar()
+    dateLabel = Label(dateTk, text="Enter the Date:").grid(row=0)
+    dateEntry = Entry(dateTk, textvariable=dateVar)
+    dateEntry.focus()
+    dateEntry.grid(row=1)
+    dateButton = Button(dateTk, text="Submit", command=date_submit).grid(row=2)
+    dateTk.bind('<Return>', date_submit)
+    dateTk.mainloop()
 
 
 # Tkinter initial window creation
@@ -142,20 +156,21 @@ for dayNames in weekDays:
 
 # Creates dates as buttons on window
 #            TODO: Function to calculate start of month based on year (EX. December 1st on wednesday 2021)
-#            TODO: Button returns date value
 startColumn = 0
 rowCt = 2
 columnCt = startColumn
+dayButton = {}
 for calDays in range(days):
-    dayButton = Button(root, text=calDays+1, command=date_action)
+    dayButton[calDays] = Button(root, text=calDays+1)
     if columnCt < 7:
-        dayButton.grid(row=rowCt, column=columnCt)
+        dayButton[calDays].grid(row=rowCt, column=columnCt)
         columnCt += 1
     else:
         columnCt = 0
         rowCt += 1
-        dayButton.grid(row=rowCt, column=columnCt)
+        dayButton[calDays].grid(row=rowCt, column=columnCt)
         columnCt += 1
+actionButton = Button(root, text="Actions", command=date_entry).grid(row=rowCt+1, column=3)
 root.mainloop()
 
 
