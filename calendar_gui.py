@@ -5,7 +5,7 @@ import math
 
 days = 0
 febNum = 28
-
+year = 2021
 
 # Calculate February on Leap Years
 def leap_year():
@@ -26,8 +26,7 @@ def year_submit(event=None):
     global year
     year = int(yearVar.get())
     yearVar.set("")
-    print(year)
-    leap_year()
+#    leap_year()
     yearTk.destroy()
 
 
@@ -36,20 +35,23 @@ def month_submit(event=None):
     global month
     month = str(monthVar.get()).lower()
     monthVar.set("")
-    print(month)
     monthTk.destroy()
 
 
 # Grabs User Date
-#               TODO: dateVar.get() return an integer not ""
 def date_submit(event=None):
     global date
-    date = int(dateVar.get())
-    print(date)
-    date_choices()
+    date = int(dateEntry.get())
+    if date < 1 or date > days:
+        dateTk.destroy()
+        date_entry()
+        return("ouch")
+    else:
+        date_choices()
 
 
 # Tkinter Year Menu
+'''
 yearTk = tk.Tk()
 yearVar = tk.StringVar()
 startTitle = Label(yearTk, text="Enter the Year:").grid(row=0)
@@ -59,6 +61,7 @@ yearEntry.grid(row=1)
 buttonYear = Button(yearTk, text="Submit", command=year_submit).grid(row=2)
 yearTk.bind('<Return>', year_submit)
 yearTk.mainloop()
+'''
 
 # Tkinter Month Menu
 monthTk = tk.Tk()
@@ -76,6 +79,8 @@ monthDates = {"january": 31, "february": febNum, "march": 31, "april": 30, "may"
               "august": 31, "september": 30, "october": 31, "november": 30, "december": 31}
 monthNums = {"january": 11, "february": 12, "march": 1, "april": 2, "may": 3, "june": 4, "july": 5, "august": 6,
              "september": 7, "october": 8, "november": 9, "december": 10}
+monthStarts = {"january": 5, "february": 1, "march": 1, "april": 4, "may": 6, "june": 2, "july": 4, "august": 0,
+             "september": 3, "october": 5, "november": 1, "december": 3}
 
 # Define number of days in chosen month
 found = False
@@ -111,30 +116,82 @@ for days in monthCount:
 days = len(events)
 
 
-# Viewing events
+# Writes data to current csv
+def rewrite():
+    f = open("month_folder/{:s}.csv".format(month), 'w', )
+    f.truncate(0)
+    newFile = []
+    fnEvts = []
+    for days in events:
+        fnEvts.append(events[days])
+        newFile.append(days)
+    newFile.append("\n")
+    for plans in fnEvts:
+        newFile.append(plans)
+    newfile = "".join(newFile)
+    f.write(newFile)
+    f.close()
+    
+
+# Viewing events (Use 'date' variable for selected date)
 #           TODO: fix output format Ex. On the 3rd, this is happening
 def view_plans():
-    if events[date] != "empty":
-        print(events[date])
+    global viewTk
+    viewTk = Tk()
+    if events[str(date)] != "empty":
+        view_title = Label(viewTk, text=events[str(date)]).grid(row=0, column=0)
+        print(events[str(date)])
     else:
+        view_title = Label(viewTk, text="No plans scheduled, yet!").grid(row=0, column=0)
         print("No plans scheduled yet\n")
+    con_bt = Button(viewTk, text="Continue", command=menu_close).grid(row=1, column=0)
+    viewTk.bind('<Return>', menu_close)
+    viewTk.mainloop()
+
+def menu_close():
+    viewTk.destroy()
+    dateTk.destroy()
+    actionsTk.destroy()
+    
+    
+# Create new events for dates
+def add_submit(event=None):
+    newEvent = str(addEntry.get())
+    events[str(date)] = newEvent
+    rewrite()
+    addTk.destroy()
+    dateTk.destroy()
+    actionsTk.destroy()
+
+def add_plans():
+    global addEntry
+    global addTk
+    addTk = Tk()
+    addVar = tk.StringVar()
+    addLabel = Label(addTk, text="Add your new event below:").grid(row=0, column=0)
+    addEntry = Entry(addTk, textvariable=addVar)
+    addEntry.grid(row=1, column=0)
+    addEntry.focus()
+    addButton = Button(addTk, text="Continue", command=add_submit).grid(row=2, column=0)
+    addTk.bind('<Return>', add_submit)
+    addTk.mainloop()    
 
 
-# User selects action for date
+# User selects action for date 
 def date_choices():
-    actions = Tk()
-    act_title = Label(actions, text="What would you like to do?").grid(row=0, column=1)
-    view_button = Button(actions, text="View Events", command=view_plans).grid(row=1, column=0)
-    add_button = Button(actions, text="Add Events").grid(row=1, column=1)
-    del_button = Button(actions, text="Delete Events").grid(row=1, column=2)
-    actions.mainloop()
+    global actionsTk
+    actionsTk = Tk()
+    act_title = Label(actionsTk, text="What would you like to do?").grid(row=0, column=1)
+    view_button = Button(actionsTk, text="View Events", command=view_plans).grid(row=1, column=0)
+    add_button = Button(actionsTk, text="Add Events", command=add_plans).grid(row=1, column=1)
+    del_button = Button(actionsTk, text="Delete Events").grid(row=1, column=2)
+    actionsTk.mainloop()
 
 
 # Grabs user's date
-#           TODO: Make output a value for the entry
 def date_entry():
+    global dateEntry
     global dateTk
-    global dateVar
     dateTk = tk.Tk()
     dateVar = tk.StringVar()
     dateLabel = Label(dateTk, text="Enter the Date:").grid(row=0)
@@ -156,7 +213,7 @@ for dayNames in weekDays:
 
 # Creates dates as buttons on window
 #            TODO: Function to calculate start of month based on year (EX. December 1st on wednesday 2021)
-startColumn = 0
+startColumn = monthStarts[month]
 rowCt = 2
 columnCt = startColumn
 dayButton = {}
