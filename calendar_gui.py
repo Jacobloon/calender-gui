@@ -7,6 +7,7 @@ days = 0
 febNum = 28
 year = 2021
 
+
 # Calculate February on Leap Years
 def leap_year():
     global febNum
@@ -65,6 +66,7 @@ yearTk.mainloop()
 
 # Tkinter Month Menu
 monthTk = tk.Tk()
+monthTk.title("Month")
 monthVar = tk.StringVar()
 monthTitle = Label(monthTk, text="Enter the Month:").grid(row=0)
 monthEntry = Entry(monthTk, textvariable=monthVar)
@@ -102,11 +104,23 @@ while not found:
 file = open("month_folder/{:s}.csv".format(month), 'r', )
 events = {}
 monthCount = file.read()
-monthCount = monthCount.split(",")
+monthCount = monthCount.split("\n")
+mthCt = []
+for chunk in monthCount:
+    tempList = chunk.split(",")
+    mthCt.extend(tempList)
+
+# Fixes CSV formatting Issues
+print(mthCt)
+mthCt.remove("")
+mthCt.remove("")
+
 evtCount = 1
 evtDate = 1
-for days in monthCount:
-    days = days.strip(",\n")
+print(mthCt)
+for days in mthCt:
+    days = days.strip(",")
+    days = days.strip("\n")
     if evtCount <= monthDates["{:s}".format(month)]:
         events[days] = ""
     if evtCount > monthDates["{:s}".format(month)]:
@@ -121,15 +135,18 @@ def rewrite():
     f = open("month_folder/{:s}.csv".format(month), 'w', )
     f.truncate(0)
     newFile = []
+    newerFile = [""]
     fnEvts = []
+    print(events)
     for days in events:
         fnEvts.append(events[days])
         newFile.append(days)
     newFile.append("\n")
+    newerFile[0] = ",".join(newFile)
     for plans in fnEvts:
-        newFile.append(plans)
-    newfile = "".join(newFile)
-    f.write(newFile)
+        newerFile.append(plans)
+    newerFile = ",".join(newerFile)
+    f.write(newerFile)
     f.close()
     
 
@@ -138,6 +155,7 @@ def rewrite():
 def view_plans():
     global viewTk
     viewTk = Tk()
+    viewTk.title("View Plans")
     if events[str(date)] != "empty":
         view_title = Label(viewTk, text=events[str(date)]).grid(row=0, column=0)
         print(events[str(date)])
@@ -157,6 +175,8 @@ def menu_close():
 # Create new events for dates
 def add_submit(event=None):
     newEvent = str(addEntry.get())
+    if newEvent == "":
+        return print("error")
     events[str(date)] = newEvent
     rewrite()
     addTk.destroy()
@@ -167,6 +187,7 @@ def add_plans():
     global addEntry
     global addTk
     addTk = Tk()
+    addTk.title("Add Plans")
     addVar = tk.StringVar()
     addLabel = Label(addTk, text="Add your new event below:").grid(row=0, column=0)
     addEntry = Entry(addTk, textvariable=addVar)
@@ -181,6 +202,7 @@ def add_plans():
 def date_choices():
     global actionsTk
     actionsTk = Tk()
+    actionsTk.title("Actions")
     act_title = Label(actionsTk, text="What would you like to do?").grid(row=0, column=1)
     view_button = Button(actionsTk, text="View Events", command=view_plans).grid(row=1, column=0)
     add_button = Button(actionsTk, text="Add Events", command=add_plans).grid(row=1, column=1)
@@ -193,6 +215,7 @@ def date_entry():
     global dateEntry
     global dateTk
     dateTk = tk.Tk()
+    dateTk.title("Date")
     dateVar = tk.StringVar()
     dateLabel = Label(dateTk, text="Enter the Date:").grid(row=0)
     dateEntry = Entry(dateTk, textvariable=dateVar)
@@ -206,6 +229,7 @@ def date_entry():
 # Tkinter initial window creation
 weekDays = {"Sunday": 0, "Monday": 1, "Tuesday": 2, "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6}
 root = Tk()
+root.title(month.upper())
 myLabel = Label(root, text=month.upper()).grid(row=0, column=3)
 for dayNames in weekDays:
     dayLabel = Label(root, text="{:s}".format(dayNames))
