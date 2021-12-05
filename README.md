@@ -3,9 +3,11 @@ CSCI 150 Project to create functioning calendar with working GUI.
 Final Proposal 
 
 TODO: 
-Finish code for date actions Ex. Delete Events, Add Events, ect. 
+Error message if conflicting events on date.
 Interactive Tkinter dates Ex. Click on a date to prompt actions
-Align Tkinter dates with (Monday - Sunday) format Ex. December 1st on Wednesday
+Additional Years / Better storage system
+More pleasant visuals for the GUI
+
 
 Calendar With Interactive GUI:
 This project will create a combined calendar and planner that focuses on specific months. Data entered into the planned will be stored in parallel .csv files. Multiple user profile calendars can be entered and referenced.
@@ -32,30 +34,30 @@ If not, return to date entry
  
 Feature list:(At least 12 for A) 
 **if statements **
-nested if statements 
+**nested if statements**
 random numbers 
 while loops 
 **for loops **
 **nested loops** 
-file input  
-data cleaning 
-parallel lists 
-file output 
+**file input**
+**data cleaning**
+parallel lists
+**file output**
 **lists manipulation **
 pixel manipulation 
-string manipulation 
+**string manipulation**
 image manipulation 
 plotting using module matplotlib 
-exhaustive data searching  
-match and stop data searching 
+exhaustive data searching
+**match and stop data searching**
 **meaningful comments throughout your program **
 
 Features not covered in class: 
-**Other collections like tuples, dictionaries, etc. **
-Integrating Python and Excel spreadsheets including formulas and VBA macros 
+**Other collections like tuples, dictionaries, etc.**
+Integrating Python and Excel spreadsheets including formulas and VBA macros
 Nested lists 
 **Creating and using your own functions **
 Use of sounds 
-**Other python modules **
+**Other python modules**
 
  
