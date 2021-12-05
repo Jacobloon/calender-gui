@@ -1,7 +1,6 @@
 from tkinter import *
 import tkinter as tk
 from tkinter.ttk import *
-import math
 
 days = 0
 febNum = 28
@@ -23,13 +22,14 @@ def leap_year():
 
 
 # Grabs User Year
+'''
 def year_submit(event=None):
     global year
     year = int(yearVar.get())
     yearVar.set("")
-#    leap_year()
+    leap_year()
     yearTk.destroy()
-
+'''
 
 # Grabs User Year
 def month_submit(event=None):
@@ -198,6 +198,26 @@ def add_plans():
     addTk.mainloop()    
 
 
+# Delete plans
+def del_submit(event=None):
+    newEvent = "empty"
+    events[str(date)] = newEvent
+    rewrite()
+    delTk.destroy()
+    dateTk.destroy()
+    actionsTk.destroy()
+
+def del_plans():
+    global delTk
+    delTk = Tk()
+    delTk.title("Delete Plans")
+    delVar = tk.StringVar()
+    delLabel = Label(delTk, text="Events have been cleared").grid(row=0, column=0)
+    delButton = Button(delTk, text="Continue", command=del_submit).grid(row=2, column=0)
+    delTk.bind('<Return>', del_submit)
+    delTk.mainloop()
+
+
 # User selects action for date 
 def date_choices():
     global actionsTk
@@ -206,7 +226,7 @@ def date_choices():
     act_title = Label(actionsTk, text="What would you like to do?").grid(row=0, column=1)
     view_button = Button(actionsTk, text="View Events", command=view_plans).grid(row=1, column=0)
     add_button = Button(actionsTk, text="Add Events", command=add_plans).grid(row=1, column=1)
-    del_button = Button(actionsTk, text="Delete Events").grid(row=1, column=2)
+    del_button = Button(actionsTk, text="Delete Events", command=del_plans).grid(row=1, column=2)
     actionsTk.mainloop()
 
 
@@ -230,7 +250,7 @@ def date_entry():
 weekDays = {"Sunday": 0, "Monday": 1, "Tuesday": 2, "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6}
 root = Tk()
 root.title(month.upper())
-myLabel = Label(root, text=month.upper()).grid(row=0, column=3)
+myLabel = Label(root, text=month.upper(), font='bold').grid(row=0, column=3)
 for dayNames in weekDays:
     dayLabel = Label(root, text="{:s}".format(dayNames))
     dayLabel.grid(row=1, column=weekDays[dayNames])
