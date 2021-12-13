@@ -46,7 +46,7 @@ def date_submit(event=None):
     if date < 1 or date > days:
         dateTk.destroy()
         date_entry()
-        return("ouch")
+        return "ouch"
     else:
         date_choices()
 
@@ -79,55 +79,62 @@ monthTk.mainloop()
 # Define {Month: Dates} in a Dictionary
 monthDates = {"january": 31, "february": febNum, "march": 31, "april": 30, "may": 31, "june": 30, "july": 31,
               "august": 31, "september": 30, "october": 31, "november": 30, "december": 31}
-monthNums = {"january": 11, "february": 12, "march": 1, "april": 2, "may": 3, "june": 4, "july": 5, "august": 6,
-             "september": 7, "october": 8, "november": 9, "december": 10}
+monthNums = {"january": 0, "february": 1, "march": 2, "april": 3, "may": 4, "june": 5, "july": 6, "august": 7,
+             "september": 8, "october": 9, "november": 10, "december": 11}
+monthList = list(monthNums)
 monthStarts = {"january": 5, "february": 1, "march": 1, "april": 4, "may": 6, "june": 2, "july": 4, "august": 0,
-             "september": 3, "october": 5, "november": 1, "december": 3}
+               "september": 3, "october": 5, "november": 1, "december": 3}
 
 # Define number of days in chosen month
-found = False
-while not found:
-    for months in monthDates:
-        if month == months:
-            found = True
-            days = monthDates[months]
-    if not found:
-        monthTk = tk.Tk()
-        monthVar = tk.StringVar()
-        startTitle = Label(monthTk, text="Enter a valid month:").grid(row=0)
-        monthTitle = Entry(monthTk, textvariable=monthVar).grid(row=1)
-        buttonTitle = Button(monthTk, text="Submit", command=month_submit).grid(row=2)
-        monthTk.bind('<Return>', month_submit)
-        monthTk.mainloop()
+def num_days():
+    found = False
+    while not found:
+        for months in monthDates:
+            if month == months:
+                found = True
+                days = monthDates[months]
+        if not found:
+            monthTk = tk.Tk()
+            monthVar = tk.StringVar()
+            startTitle = Label(monthTk, text="Enter a valid month:").grid(row=0)
+            monthTitle = Entry(monthTk, textvariable=monthVar).grid(row=1)
+            buttonTitle = Button(monthTk, text="Submit", command=month_submit).grid(row=2)
+            monthTk.bind('<Return>', month_submit)
+            monthTk.mainloop()
 
 # Reads current csv
-file = open("month_folder/{:s}.csv".format(month), 'r', )
-events = {}
-monthCount = file.read()
-monthCount = monthCount.split("\n")
-mthCt = []
-for chunk in monthCount:
-    tempList = chunk.split(",")
-    mthCt.extend(tempList)
+def month_select():
+    global events
+    global mthCt
+    global days
+    file = open("month_folder/{:s}.csv".format(month), 'r', )
+    events = {}
+    monthCount = file.read()
+    monthCount = monthCount.split("\n")
+    mthCt = []
+    for chunk in monthCount:
+        tempList = chunk.split(",")
+        mthCt.extend(tempList)
 
-# Fixes CSV formatting Issues
-print(mthCt)
-mthCt.remove("")
-mthCt.remove("")
+    # Fixes CSV formatting Issues
+    print(mthCt)
+    mthCt.remove("")
+    mthCt.remove("")
 
-evtCount = 1
-evtDate = 1
-print(mthCt)
-for days in mthCt:
-    days = days.strip(",")
-    days = days.strip("\n")
-    if evtCount <= monthDates["{:s}".format(month)]:
-        events[days] = ""
-    if evtCount > monthDates["{:s}".format(month)]:
-        events[str(evtDate)] = days
-        evtDate += 1
-    evtCount += 1
-days = len(events)
+    evtCount = 1
+    evtDate = 1
+    print(mthCt)
+    for days in mthCt:
+        days = days.strip(",")
+        days = days.strip("\n")
+        if evtCount <= monthDates["{:s}".format(month)]:
+            events[days] = ""
+        if evtCount > monthDates["{:s}".format(month)]:
+            events[str(evtDate)] = days
+            evtDate += 1
+        evtCount += 1
+    days = len(events)
+month_select()
 
 
 # Writes data to current csv
@@ -183,6 +190,7 @@ def add_submit(event=None):
     dateTk.destroy()
     actionsTk.destroy()
 
+
 def add_plans():
     global addEntry
     global addTk
@@ -206,6 +214,7 @@ def del_submit(event=None):
     delTk.destroy()
     dateTk.destroy()
     actionsTk.destroy()
+
 
 def del_plans():
     global delTk
@@ -245,48 +254,53 @@ def date_entry():
     dateTk.bind('<Return>', date_submit)
     dateTk.mainloop()
 
+# Moves month left or right
+def cal_left():
+    global month
+    index = monthNums[month] - 1
+    if index < 0:
+        index = 11
+    month = monthList[index]
+    root.destroy()
+    month_select()
+    cal_window()
 
-# Tkinter initial window creation
+def cal_right():
+    global month
+    index = monthNums[month] + 1
+    if index > 11:
+        index = 0
+    month = monthList[index]
+    root.destroy()
+    month_select()
+    cal_window()
+
+# Tkinter initial window creation [REQUIRES: month, days]
 weekDays = {"Sunday": 0, "Monday": 1, "Tuesday": 2, "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6}
-root = Tk()
-root.title(month.upper())
-myLabel = Label(root, text=month.upper(), font='bold').grid(row=0, column=3)
-for dayNames in weekDays:
-    dayLabel = Label(root, text="{:s}".format(dayNames))
-    dayLabel.grid(row=1, column=weekDays[dayNames])
-
-# Creates dates as buttons on window
-#            TODO: Function to calculate start of month based on year (EX. December 1st on wednesday 2021)
-startColumn = monthStarts[month]
-rowCt = 2
-columnCt = startColumn
-dayButton = {}
-for calDays in range(days):
-    dayButton[calDays] = Button(root, text=calDays+1)
-    if columnCt < 7:
-        dayButton[calDays].grid(row=rowCt, column=columnCt)
-        columnCt += 1
-    else:
-        columnCt = 0
-        rowCt += 1
-        dayButton[calDays].grid(row=rowCt, column=columnCt)
-        columnCt += 1
-actionButton = Button(root, text="Actions", command=date_entry).grid(row=rowCt+1, column=3)
-root.mainloop()
-
-
-'''# Python code to demonstrate the working of
-# calendar() and first_weeks_day()
-
-# importing calendar module for calendar operations
-import calendar
- 
-# using calendar to print calendar of year
-# prints calendar of 2012
-print ("The calendar of year 2012 is : ")
-print (calendar.calendar(2012,2,1,6))
- 
-#using firstweekday() to print starting day number
-print ("The starting day number in calendar is : ",end="")
-print (calendar.firstweekday())
-'''
+def cal_window():
+    global root
+    root = Tk()
+    root.title(month.upper())
+    myLabel = Label(root, text=month.upper(), font='bold').grid(row=0, column=3)
+    for dayNames in weekDays:
+        dayLabel = Label(root, text="{:s}".format(dayNames))
+        dayLabel.grid(row=1, column=weekDays[dayNames])
+    startColumn = monthStarts[month]
+    rowCt = 2
+    columnCt = startColumn
+    dayButton = {}
+    for calDays in range(days):
+        dayButton[calDays] = Button(root, text=calDays+1)
+        if columnCt < 7:
+            dayButton[calDays].grid(row=rowCt, column=columnCt)
+            columnCt += 1
+        else:
+            columnCt = 0
+            rowCt += 1
+            dayButton[calDays].grid(row=rowCt, column=columnCt)
+            columnCt += 1
+    leftBt = Button(root, text="<", command=cal_left).grid(row=rowCt+1, column=2)
+    actionButton = Button(root, text="Actions", command=date_entry).grid(row=rowCt+1, column=3)
+    rightBt = Button(root, text=">", command=cal_right).grid(row=rowCt+1, column=4)
+    root.mainloop()
+cal_window()
