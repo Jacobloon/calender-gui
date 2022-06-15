@@ -4,9 +4,8 @@ Final Proposal
 
 TODO: 
 Error message if conflicting events on date.
-Arrow Buttons to Scroll Between Months
 Interactive Tkinter dates Ex. Click on a date to prompt actions
-Additional Years / Better storage system
+Better storage system
 More pleasant visuals for the GUI
 
 
