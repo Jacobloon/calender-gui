@@ -1,0 +1,2 @@
+my_button = Button(root, text="Get Date", command=grab_date)
+my_button.pack(paddy=20)
